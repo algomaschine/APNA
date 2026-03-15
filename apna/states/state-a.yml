@@ -1,0 +1,23 @@
+# APNA State A - VNI/VLAN and BGP/ACL variables
+# Used by Jinja2 templates to generate device configs.
+
+state_id: A
+description: "State A - primary mapping and path preference"
+
+# VNI to VLAN mapping (example; adjust for your fabric)
+vni_vlan_map:
+  10001: 100
+  10002: 101
+  10003: 102
+
+# BGP path preference / role (e.g. primary vs backup for EVPN)
+bgp:
+  path_preference: primary   # or backup
+  local_pref: 200
+
+# ACL / policy name or identifier (templates can expand this)
+acl_profile: profile_a
+
+# Optional: per-device or per-role overrides
+# spines: { ... }
+# leaves: { ... }

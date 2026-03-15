@@ -1,0 +1,31 @@
+# Copy to inventory.yml and fill in your devices.
+# APNA apply order: spines first, then leaves (see playbook-apply.yml).
+
+all:
+  children:
+    spines:
+      hosts:
+        spine1:
+          ansible_host: 192.168.1.1
+        spine2:
+          ansible_host: 192.168.1.2
+      vars:
+        ansible_connection: network_cli
+        ansible_network_os: eos
+        # ansible_user: admin
+        # ansible_ssh_pass: "{{ vault_ssh_pass }}"
+
+    leaves:
+      hosts:
+        leaf1:
+          ansible_host: 192.168.1.11
+        leaf2:
+          ansible_host: 192.168.1.12
+      vars:
+        ansible_connection: network_cli
+        ansible_network_os: eos
+
+# For Arista eAPI instead of SSH:
+# ansible_connection: httpapi
+# ansible_httpapi_use_ssl: true
+# ansible_httpapi_validate_certs: false

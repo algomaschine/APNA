@@ -1,0 +1,29 @@
+! APNA-generated EVPN/VXLAN config - State {{ state_id }}
+! Generated at {{ generated_at }}
+
+{% for vni, vlan in vni_vlan_map.items() %}
+vlan {{ vlan }}
+   name VNI-{{ vni }}
+
+vxlan vtep {{ vni }}
+   vxlan source-interface Loopback0
+   vxlan udp-port 4789
+   vlan {{ vlan }} vni {{ vni }}
+{% endfor %}
+
+router bgp {{ bgp_as | default(65001) }}
+   router-id {{ router_id }}
+   bgp path-selection multipath ecmp 64
+   neighbor EVPN peer group
+   neighbor EVPN remote-as {{ bgp_as | default(65001) }}
+   neighbor EVPN send-community extended
+   !
+   address-family evpn
+      neighbor EVPN activate
+      no neighbor EVPN route-reflector-client
+   !
+   address-family ipv4
+      network {{ underlay_prefix | default('0.0.0.0/0') }}
+   !
+   ! Path preference for this state
+   default local-preference {{ bgp.local_pref }}

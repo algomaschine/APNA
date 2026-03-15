@@ -1,0 +1,41 @@
+---
+# APNA: Apply generated configs in order (spines then leaves).
+# Run by orchestrator: morph.py --apply
+# Or manually: ansible-playbook -i inventory.yml playbook-apply.yml -e "generated_config_dir=/path/to/apna/generated"
+#
+# Expects generated_config_dir to contain spine.cfg and leaf.cfg (or per-host .cfg).
+
+- name: Apply APNA config - spines first
+  hosts: spines
+  order: inventory
+  gather_facts: false
+  tasks:
+    - name: Load generated spine config
+      ansible.builtin.set_fact:
+        host_config: "{{ lookup('file', generated_config_dir + '/spine.cfg') }}"
+      when: generated_config_dir is defined
+
+    - name: Push config via eos_config (Arista)
+      arista.eos.eos_config:
+        lines: "{{ host_config.split('\n') }}"
+        match: line
+        save_when: modified
+      when: host_config is defined
+      # For Juniper: use junipernetworks.junos.junos_config with load: set
+
+- name: Apply APNA config - leaves second
+  hosts: leaves
+  order: inventory
+  gather_facts: false
+  tasks:
+    - name: Load generated leaf config
+      ansible.builtin.set_fact:
+        host_config: "{{ lookup('file', generated_config_dir + '/leaf.cfg') }}"
+      when: generated_config_dir is defined
+
+    - name: Push config via eos_config (Arista)
+      arista.eos.eos_config:
+        lines: "{{ host_config.split('\n') }}"
+        match: line
+        save_when: modified
+      when: host_config is defined

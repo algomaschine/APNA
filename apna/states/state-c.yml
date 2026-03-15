@@ -1,0 +1,15 @@
+# APNA State C
+
+state_id: C
+description: "State C - third mapping and path preference"
+
+vni_vlan_map:
+  10001: 102
+  10002: 100
+  10003: 101
+
+bgp:
+  path_preference: primary
+  local_pref: 200
+
+acl_profile: profile_c

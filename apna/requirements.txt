@@ -1,0 +1,7 @@
+# APNA orchestrator dependencies
+PyYAML>=6.0
+Jinja2>=3.0
+
+# Optional: for running Ansible from Python (morph.py --apply uses subprocess ansible-playbook by default)
+# ansible-core>=2.14
+# arista.eos  # for Arista EOS modules

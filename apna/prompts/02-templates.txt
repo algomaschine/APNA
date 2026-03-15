@@ -1,0 +1,34 @@
+I am rolling out APNA. The orchestrator (morph.py) renders Jinja2 templates from apna/templates/ using variables from the state YAML files. It expects templates to use at least: state_id, vni_vlan_map, bgp, acl_profile, generated_at. The combined render is written to generated/spine.cfg and generated/leaf.cfg. Generate or fix my config templates so they produce valid device config for my vendor.
+
+=== MY VENDOR AND NEEDS ===
+
+Vendor and OS: [Arista EOS / Juniper JunOS / other]
+
+What must the template generate?
+- [ ] EVPN/VXLAN (VLAN, VNI, VXLAN VTEP/config)
+- [ ] BGP (neighbor, address-family evpn, local-preference or equivalent)
+- [ ] ACL (optional; can be a simple named ACL that varies by acl_profile)
+
+[OPTIONAL] Paste an existing device config snippet so the template matches our exact syntax:
+[paste here]
+
+[OPTIONAL] Extra variables we have in state YAML: [e.g. router_id, bgp_as, underlay_prefix]
+
+=== INSTRUCTIONS ===
+
+1) Generate one or more Jinja2 templates (e.g. eos-evpn.j2, eos-acl.j2) that:
+   - Iterate over vni_vlan_map (e.g. {% for vni, vlan in vni_vlan_map.items() %}) for VLAN/VNI blocks.
+   - Use bgp.local_pref and bgp.path_preference (or equivalent) for BGP.
+   - Use acl_profile and state_id where relevant.
+   - Include a comment with generated_at so configs are traceable.
+
+2) Output must be valid for [Arista EOS / Juniper JunOS] so that when we paste the rendered output onto a device (or push via Ansible), it does not cause syntax errors. Use standard config commands for that OS.
+
+3) Give the exact file names and contents. I will put them in apna/templates/. morph.py already renders all .j2 files and concatenates them into spine.cfg and leaf.cfg.
+
+Format your response as:
+--- FILE: apna/templates/eos-evpn.j2 ---
+<contents>
+--- END FILE ---
+
+(and same for any second file, e.g. eos-acl.j2)

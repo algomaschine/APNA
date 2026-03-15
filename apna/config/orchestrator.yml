@@ -1,0 +1,27 @@
+# APNA Orchestrator configuration
+# See HOWTO.md for full documentation.
+
+# Transition mode: "cycle" (deterministic A->B->C->A) or "random" (CSPRNG)
+transition_mode: cycle
+
+# Morph interval in seconds (only used when schedule is time-based)
+morph_interval_seconds: 3600
+
+# State names (order matters for cycle mode)
+states:
+  - A
+  - B
+  - C
+
+# Paths (relative to this config file or absolute)
+states_dir: ../states
+templates_dir: ../templates
+output_dir: ../generated
+state_file: ../data/current_state.json
+
+# Ansible: playbook to run after generating configs (leave empty to skip)
+ansible_playbook: ../ansible/playbook-apply.yml
+ansible_inventory: ../ansible/inventory.yml
+
+# Optional: path to trigger file (if present, morph immediately and remove file)
+# attack_trigger_file: /var/run/apna/trigger_morph

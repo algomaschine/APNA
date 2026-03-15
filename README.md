@@ -1,18 +1,25 @@
 # Asymmetric Polymorphic Network Architecture (APNA)
 
-Showcase whitepaper and assets for high-availability Web3 node and RPC infrastructure.
+Showcase whitepaper and rollout automation for high-availability Web3 node and RPC infrastructure.
 
-## Contents
+## Repository layout
+
+**Initial whitepaper (at repo root):**
 
 | File | Description |
 |------|-------------|
-| **APNA-Whitepaper.html** | **Main deliverable.** Single-page whitepaper with full design: typography (DM Sans, JetBrains Mono), dark theme, all infographics embedded. Open in a browser. |
-| **APNA-Whitepaper.pdf** | PDF export. All process/algorithm diagrams (Figs. 1–4) are **embedded** in the HTML as inline SVG data, so they render in the PDF. Regenerate with: `google-chrome --headless --disable-gpu --no-pdf-header-footer --print-to-pdf="APNA-Whitepaper.pdf" "file://$(pwd)/APNA-Whitepaper.html"` (run from this directory). For best result, open the HTML in Chrome and use Print → Save as PDF with **Background graphics** enabled. |
-| **Asymmetric-Polymorphic-Network-Architecture-Whitepaper.md** | Markdown source: concept, justification, tech grounding, feasibility, comparison table, references. |
-| **infographic-topologies.svg** | Topology comparison: traditional symmetric vs APNA asymmetric+polymorphic (different shapes per DC). |
-| **infographic-morphing.svg** | Morphing state machine (A → B → C → A), triggers, orchestrator. |
-| **infographic-morphing-flow.svg** | **Algorithm flowchart:** 6-step morphing flow (State model → Transition decision → Config generation → Apply order → Verification → Attack-triggered morph; loop). |
-| **infographic-transition-decision.svg** | **Step 2 illustrated:** Deterministic cycle vs unpredictable secure_random; entropy sources. |
+| **APNA-Whitepaper.html** | Main whitepaper. Open in a browser. |
+| **APNA-Whitepaper.pdf** | PDF export. Regenerate with: `google-chrome --headless --disable-gpu --no-pdf-header-footer --print-to-pdf="APNA-Whitepaper.pdf" "file://$(pwd)/APNA-Whitepaper.html"` (run from this directory). |
+| **Asymmetric-Polymorphic-Network-Architecture-Whitepaper.md** | Markdown source. |
+| **infographic-*.svg**, **infographic-*.png** | Diagram sources and rendered images. |
+| **inline_svgs.py**, **embed_svgs.py** | Whitepaper build scripts (run from this directory). |
+| **HOWTO.md** | Rollout and configuration how-to (~40 min with AI prompts). |
+
+**Tech implementation (in one folder):**
+
+| Folder | Description |
+|--------|-------------|
+| **apna/** | Orchestrator (**morph.py**), config, states, Jinja2 templates, Ansible playbooks, and **apna/prompts/** (AI prompt templates for fast rollout). See **HOWTO.md**. |
 
 ## Quick summary
 
@@ -20,8 +27,13 @@ Showcase whitepaper and assets for high-availability Web3 node and RPC infrastru
 - **Polymorphic:** Diversity of topology per DC *and* dynamic change over time (morphing), unpredictable to an attacker — reduces pattern-stability-of-attack.
 - **Grounded in:** Arista EOS, Juniper JunOS, EVPN/VXLAN, BGP/OSPF, bare-metal, Ansible/Python; no new hardware; morphing is control-plane/config, not data-plane hot path.
 
-## Viewing
+## Viewing the whitepaper
 
-- **HTML:** Open `APNA-Whitepaper.html` in a browser. All infographics (algorithm flow, transition decision, topologies, state machine) are embedded inline so they appear in the page and in **Print to PDF**.
-- **PDF:** Use the pre-generated `APNA-Whitepaper.pdf` or print from the HTML (enable **Background graphics** to keep the dark theme).
-- **Re-embedding SVGs:** If you edit the `.svg` files, run `python3 embed_svgs.py` from this directory to embed them again into the HTML.
+- **HTML:** Open **APNA-Whitepaper.html** in a browser.
+- **PDF:** Use **APNA-Whitepaper.pdf** or print from the HTML (enable **Background graphics**).
+
+## Rollout (~40 min)
+
+1. Read **HOWTO.md**.
+2. Use **apna/prompts/** with an AI to generate state files, templates, and Ansible inventory from your context.
+3. Run `python apna/morph.py --apply` (after `pip install -r apna/requirements.txt` and configuring credentials).

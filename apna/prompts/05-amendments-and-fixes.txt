@@ -1,0 +1,32 @@
+I am rolling out APNA and need to amend an existing script or config so it fits my environment. I will describe what needs to change; output the exact patch or new file content.
+
+=== REPO CONTEXT ===
+
+The repo has:
+- apna/morph.py — Python orchestrator: loads config from config/orchestrator.yml, decides next state (cycle or random), loads state YAML from states/, renders Jinja2 from templates/ into generated/, saves current state to data/current_state.json, optionally runs ansible-playbook.
+- apna/config/orchestrator.yml — transition_mode, states list, paths (states_dir, templates_dir, output_dir, state_file, ansible_playbook, ansible_inventory), optional attack_trigger_file.
+- apna/states/state-*.yml — per-state variables (state_id, vni_vlan_map, bgp, acl_profile, etc.).
+- apna/templates/*.j2 — Jinja2 templates; morph.py renders them and writes spine.cfg + leaf.cfg to generated/.
+- apna/ansible/playbook-apply.yml — applies generated/spine.cfg to spines, generated/leaf.cfg to leaves.
+
+=== WHAT I NEED TO CHANGE ===
+
+[Describe exactly what you need, e.g.:]
+
+- "I have 4 states (A, B, C, D) not 3. Change orchestrator config and morph.py so it supports 4 states."
+- "My state files are in /etc/apna/states and I want to run morph.py from systemd with config in /etc/apna/config/orchestrator.yml. Give me the exact orchestrator.yml paths."
+- "I need morph.py to also render a Juniper Junos template (junos-evpn.j2) and write junos-spine.cfg / junos-leaf.cfg; the Ansible playbook uses different tasks for Juniper vs Arista."
+- "Add a --dry-run flag to morph.py that decides next state and renders configs but does not save state and does not run Ansible."
+- "Our Ansible inventory is dynamic (we use a cloud provider). Generate an inventory script or template that outputs YAML with spines and leaves from [source]."
+- "I want transition_mode: random to use N states but exclude the current state (so we always morph to a different state). Change the decide_next_state logic."
+
+=== INSTRUCTIONS ===
+
+1) Apply minimal, correct changes. Prefer editing existing files over adding new ones unless I asked for a new file.
+2) For morph.py: keep Python 3.8+ compatible; use pathlib and the existing structure (load_yaml, save_json, load_state_file, decide_next_state, render_templates, run_ansible).
+3) Output format:
+   --- FILE: path/to/file ---
+   <full file content or unified diff>
+   --- END FILE ---
+
+If multiple files, list each. I will copy them into the repo so rollout stays under 40 minutes.

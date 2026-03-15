@@ -1,0 +1,29 @@
+I am rolling out APNA (Asymmetric Polymorphic Network Architecture). The orchestrator expects 3 state YAML files (state-a.yml, state-b.yml, state-c.yml) in apna/states/. Each file is used as Jinja2 variables to generate device configs. Generate the 3 state files for me.
+
+=== MY FABRIC CONTEXT ===
+
+Vendor: [Arista EOS / Juniper JunOS / other]
+
+VNIs I use: [e.g. 10001, 10002, 10003]
+
+VLANs I use (or want to map VNIs to): [e.g. 100, 101, 102]
+
+How I want to rotate across 3 states (A, B, C):
+- Option A: "Rotate mapping" — State A: VNI 10001->VLAN 100, 10002->101, 10003->102; State B: 10001->101, 10002->102, 10003->100; State C: 10001->102, 10002->100, 10003->101.
+- Option B: "Only BGP/ACL change" — Same VNI-VLAN in all states; vary BGP local_pref or acl_profile only.
+- Option C: [Describe your own]
+
+BGP: my AS is [e.g. 65001]. For path preference I want: [e.g. State A primary (local_pref 200), B backup (150), C primary (200)].
+
+[OPTIONAL] Any extra keys I need per state (e.g. underlay_prefix, router_id): [list them]
+
+=== INSTRUCTIONS ===
+
+Output exactly 3 YAML files: state-a.yml, state-b.yml, state-c.yml. Each file must include:
+- state_id: A | B | C
+- description: one short line
+- vni_vlan_map: dict mapping VNI (int) to VLAN (int)
+- bgp: dict with path_preference (string) and local_pref (int)
+- acl_profile: string (e.g. profile_a, profile_b, profile_c)
+
+Use valid YAML. I will save them to apna/states/ as state-a.yml, state-b.yml, state-c.yml.

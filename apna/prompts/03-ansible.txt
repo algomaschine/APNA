@@ -1,0 +1,42 @@
+I am rolling out APNA. After morph.py generates configs into apna/generated/ (spine.cfg and leaf.cfg), I need Ansible to apply them in order: spines first, then leaves. Generate my inventory and any playbook amendments for my environment.
+
+=== MY ENVIRONMENT ===
+
+Vendor: [Arista EOS / Juniper JunOS]
+
+Spines (hostname, IP or FQDN):
+[spine1 192.168.1.1]
+[spine2 192.168.1.2]
+
+Leaves (hostname, IP or FQDN):
+[leaf1 192.168.1.11]
+[leaf2 192.168.1.12]
+
+Connection: [SSH with network_cli / Arista eAPI (httpapi) / Juniper NETCONF]
+
+[OPTIONAL] SSH user: [e.g. admin]
+[OPTIONAL] SSH key path or password: [e.g. use vault; just say "use ansible_user and ansible_ssh_private_key_file or vault"]
+
+=== INSTRUCTIONS ===
+
+1) Generate apna/ansible/inventory.yml in YAML format with groups "spines" and "leaves". Each host must have ansible_host set. Set group or host vars so that:
+   - For Arista: ansible_connection=network_cli and ansible_network_os=eos (or ansible_connection=httpapi for eAPI).
+   - For Juniper: ansible_connection=netconf and ansible_network_os=junos (or equivalent).
+
+2) The playbook playbook-apply.yml already:
+   - Runs on spines first, then leaves.
+   - Sets host_config from a file: "{{ lookup('file', generated_config_dir + '/spine.cfg') }}" for spines and leaf.cfg for leaves.
+   - Pushes with arista.eos.eos_config (lines + match: line).
+   If my vendor is Juniper, output a replacement or extra tasks that use junipernetworks.junos.junos_config and load the generated config (set or load: merge). If my vendor is Arista, only confirm inventory is correct.
+
+3) Ensure the playbook is called with: generated_config_dir set to the path of apna/generated (absolute or relative). morph.py passes this as -e "generated_config_dir=...".
+
+Output format:
+--- FILE: apna/ansible/inventory.yml ---
+<contents>
+--- END FILE ---
+
+If playbook changes are needed:
+--- CHANGES to apna/ansible/playbook-apply.yml ---
+<diff or full replacement>
+--- END CHANGES ---

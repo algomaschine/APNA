@@ -1,0 +1,15 @@
+# APNA State B
+
+state_id: B
+description: "State B - alternate mapping and path preference"
+
+vni_vlan_map:
+  10001: 101
+  10002: 102
+  10003: 100
+
+bgp:
+  path_preference: backup
+  local_pref: 150
+
+acl_profile: profile_b

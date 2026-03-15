@@ -1,0 +1,45 @@
+You are helping me roll out APNA (Asymmetric Polymorphic Network Architecture) in under 40 minutes. I have an existing repo with: orchestrator script (morph.py), config (config/orchestrator.yml), states/ and templates/ directories, and Ansible playbook (ansible/playbook-apply.yml). I need you to generate ALL of the following in one response, as ready-to-paste file contents, so I can drop them into the repo and run morph.py --apply.
+
+=== MY CONTEXT (fill this in) ===
+
+Vendor and OS: [e.g. Arista EOS / Juniper JunOS]
+
+Spines (hostname and IP or FQDN, one per line):
+[spine1 192.168.1.1]
+[spine2 192.168.1.2]
+
+Leaves (hostname and IP or FQDN, one per line):
+[leaf1 192.168.1.11]
+[leaf2 192.168.1.12]
+
+VNI-to-VLAN mapping I want to rotate across 3 states (use 3 states A, B, C; each state is a different permutation or variation):
+[Example: State A: 10001->100, 10002->101, 10003->102; State B: 10001->101, 10002->102, 10003->100; State C: 10001->102, 10002->100, 10003->101]
+
+BGP AS and any fixed BGP details: [e.g. AS 65001, or "same as existing"]
+
+Ansible connection: [e.g. network_cli + SSH, or httpapi for Arista eAPI]
+
+=== WHAT TO GENERATE ===
+
+1) State files
+- Generate exactly 3 YAML files: state-a.yml, state-b.yml, state-c.yml for apna/states/.
+- Each must have: state_id, description, vni_vlan_map (dict), bgp (with path_preference and local_pref), acl_profile.
+- Use my VNI/VLAN rotations and sensible BGP local_pref differences (e.g. 200, 150, 200 for A, B, C).
+
+2) Jinja2 templates
+- Generate apna/templates/ config templates for my vendor that use the state variables (state_id, vni_vlan_map, bgp, acl_profile, generated_at). Output valid device config snippets (EVPN/VXLAN and BGP at minimum). Name them appropriately (e.g. eos-evpn.j2, eos-acl.j2 for Arista). Ensure the combined output can be used as spine.cfg and leaf.cfg (morph.py concatenates templates).
+
+3) Ansible
+- Generate apna/ansible/inventory.yml from my spines and leaves. Use the Ansible connection I specified. Include group vars for connection type and network_os.
+- If needed, give a minimal change to playbook-apply.yml (or a replacement) so it works with my vendor (e.g. eos_config vs junos_config) and passes generated_config_dir.
+
+4) Optional but requested
+- A one-line or short verification command/task (Arista or Juniper) to check BGP/EVPN after apply.
+- A systemd timer unit or cron line that runs morph every hour: morph.py --apply.
+
+Output format: for each file, give a block like this so I can copy-paste (paths are relative to repo root):
+--- FILE: apna/states/state-a.yml ---
+<contents>
+--- END FILE ---
+
+Do the same for every file. Repo layout: apna/ (orchestrator, states, templates, ansible), docs/ (HOWTO), whitepaper/ (HTML/PDF). I will create/replace those files and run from repo root: python apna/morph.py --apply (after pip install -r apna/requirements.txt and configuring credentials).

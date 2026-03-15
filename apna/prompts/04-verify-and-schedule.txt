@@ -1,0 +1,53 @@
+I am rolling out APNA. I need (1) a quick verification step after apply to check BGP/EVPN convergence, and (2) scheduling so morph runs automatically (e.g. every hour). Optionally (3) a way to trigger an immediate morph (e.g. for attack-triggered morph).
+
+=== MY SETUP ===
+
+Vendor: [Arista EOS / Juniper JunOS]
+
+Orchestrator path: [e.g. /opt/apna/morph.py or /home/user/repo/apna/morph.py]
+Config path: [e.g. /opt/apna/config/orchestrator.yml]
+Working directory to run morph from: [e.g. /opt/apna or /home/user/repo]
+Python: [e.g. python3 or /usr/bin/python3]
+
+[OPTIONAL] I want attack-triggered morph: when file [e.g. /var/run/apna/trigger_morph] exists, next morph run should morph immediately and delete the file. (Orchestrator already supports this if we set attack_trigger_file in config.)
+
+=== INSTRUCTIONS ===
+
+1) Verification
+   - Add one Ansible task or a one-liner that checks BGP/EVPN is converged after we push config. For Arista: e.g. "show bgp evpn summary" and check for Established. For Juniper: equivalent command. Output either:
+     - A short Ansible task (YAML) I can add to the end of playbook-apply.yml, or
+     - A standalone verify playbook (e.g. playbook-verify.yml) that runs after apply and fails if not converged.
+   - If a one-liner shell command is enough (run on a jump host that can ssh to a device), give that too.
+
+2) Scheduling
+   - Give a systemd timer setup: a .service unit that runs morph.py --apply (with correct WorkingDirectory and ExecStart), and a .timer unit that triggers it every hour (OnCalendar=hourly). Use my paths above.
+   - AND/OR give a cron line that runs morph every hour, with correct cd and python path.
+
+3) Attack-triggered morph (optional)
+   - If I said I want attack-triggered morph: give the exact line to add to apna/config/orchestrator.yml (attack_trigger_file: ...).
+   - And a one-liner or tiny script that an external system (e.g. IDS) can run to trigger a morph on next run: e.g. "touch /var/run/apna/trigger_morph" and ensure the next cron/systemd run will pick it up (it will if morph.py runs within the interval).
+
+Output format:
+--- VERIFICATION (Ansible task or playbook) ---
+<YAML>
+--- END VERIFICATION ---
+
+--- SYSTEMD service: apna-morph.service ---
+<contents>
+--- END FILE ---
+
+--- SYSTEMD timer: apna-morph.timer ---
+<contents>
+--- END FILE ---
+
+--- CRON (alternative) ---
+<cron line>
+--- END CRON ---
+
+--- CONFIG: attack_trigger_file line for orchestrator.yml ---
+<line or block>
+--- END CONFIG ---
+
+--- TRIGGER one-liner for IDS/external ---
+<command>
+--- END TRIGGER ---

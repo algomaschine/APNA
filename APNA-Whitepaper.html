@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>APNA — Asymmetric Polymorphic Network Architecture</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <style>
+    :root {
+      --bg: #0f0f14;
+      --bg2: #1a1a2e;
+      --bg3: #16213e;
+      --accent: #7dd3fc;
+      --accent2: #a78bfa;
+      --danger: #e94560;
+      --success: #52b788;
+      --text: #e2e8f0;
+      --text2: #94a3b8;
+      --border: #334155;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Times New Roman', Times, Georgia, serif;
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+    .wrap { max-width: 820px; margin: 0 auto; padding: 2rem 1.5rem; }
+    header {
+      text-align: center;
+      padding: 3rem 0 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+    h1 { font-size: 1.85rem; font-weight: 700; margin: 0 0 0.35em; color: var(--accent); }
+    .subtitle { font-size: 1.1rem; color: var(--text2); margin: 0 0 1rem; }
+    .meta { font-size: 0.9rem; color: var(--text2); }
+    .meta.contact { margin-top: 0.5rem; }
+    .meta.contact a { color: var(--accent); }
+    h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin: 2.5rem 0 1rem;
+      color: var(--accent);
+      padding-bottom: 0.35rem;
+      border-bottom: 1px solid var(--border);
+    }
+    h3 { font-size: 1.1rem; font-weight: 600; margin: 1.5rem 0 0.6rem; color: var(--accent2); }
+    p { margin: 0 0 1rem; }
+    strong { color: var(--text); font-weight: 600; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    ul, ol { margin: 0 0 1rem; padding-left: 1.5rem; }
+    li { margin: 0.25rem 0; }
+    .infographic {
+      margin: 2rem 0;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--bg2);
+    }
+    .infographic img { display: block; max-width: 100%; height: auto; }
+    .infographic-svg { display: block; width: 100%; max-width: 100%; overflow: visible; }
+    .infographic-svg svg { display: block; max-width: 100%; height: auto; vertical-align: top; }
+    .infographic figcaption {
+      padding: 0.75rem 1rem;
+      font-size: 0.9rem;
+      color: var(--text2);
+      border-top: 1px solid var(--border);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 0.95rem;
+    }
+    th, td { padding: 0.6rem 0.85rem; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg3); color: var(--accent); font-weight: 600; }
+    tr:nth-child(even) { background: rgba(22,33,62,0.4); }
+    code, .mono { font-family: 'Courier New', Courier, monospace; font-size: 0.9em; font-weight: 500; background: var(--bg3); padding: 0.2em 0.45em; border-radius: 4px; }
+    .algo-box {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+      font-size: 0.95rem;
+    }
+    .algo-box .step { color: var(--accent); font-weight: 600; margin-bottom: 0.25rem; }
+    .conclusion { background: var(--bg3); border-left: 4px solid var(--accent); padding: 1rem 1.25rem; margin: 2rem 0; border-radius: 0 8px 8px 0; }
+    footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); font-size: 0.9rem; color: var(--text2); }
+    .glossary { margin: 1rem 0; }
+    .glossary dt { font-weight: 600; color: var(--accent); margin-top: 1rem; margin-bottom: 0.25rem; }
+    .glossary dt:first-child { margin-top: 0; }
+    .glossary dd { margin-left: 0; margin-bottom: 0.5rem; padding-left: 1rem; border-left: 2px solid var(--border); color: var(--text2); }
+
+    @media print {
+      /* Force all text dark on white - no pale colors from screen theme */
+      *, *::before, *::after { color: #1a1a1a !important; }
+      body { background: #fff !important; color: #1a1a1a !important; font-family: 'Times New Roman', Times, Georgia, serif; font-size: 12pt; line-height: 1.5; font-weight: 400; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .wrap { max-width: 100%; padding: 1rem 1.25rem; }
+      header { border-bottom-color: #1a1a1a; }
+      h1, h3, .subtitle, .meta, p, li, strong, b, em, i, span, td, th, dd, dt, figcaption, footer { color: #1a1a1a !important; }
+      .meta.contact a, a { color: #1e40af !important; }
+      h2 { color: #0f766e !important; border-bottom-color: #1a1a1a; font-weight: 700; }
+      .infographic { break-inside: avoid; page-break-inside: avoid; margin: 1.25rem 0; border-color: #1a1a1a; background: #fff !important; }
+      .infographic figcaption { color: #1a1a1a !important; border-top-color: #1a1a1a; }
+      table th, table td { border-color: #1a1a1a; }
+      th { background: #e8e8e8 !important; color: #1a1a1a !important; font-weight: 700; }
+      tr:nth-child(even) { background: #f5f5f5 !important; }
+      code, .mono { font-family: 'Courier New', Courier, monospace; background: #f0f0f0 !important; color: #1a1a1a !important; border: 1px solid #1a1a1a; }
+      .algo-box { background: #fafafa !important; border-color: #1a1a1a; color: #1a1a1a !important; }
+      .algo-box .step { color: #0f766e !important; font-weight: 700; }
+      .algo-box p { color: #1a1a1a !important; }
+      .conclusion { background: #f5f5f5 !important; border-left-color: #0f766e; color: #1a1a1a !important; }
+      .conclusion p { color: #1a1a1a !important; }
+      footer { border-top-color: #1a1a1a; color: #1a1a1a !important; }
+      footer p { color: #1a1a1a !important; }
+      .glossary dt { color: #1a1a1a !important; font-weight: 700; }
+      .glossary dd { color: #1a1a1a !important; border-left-color: #1a1a1a; }
+      .page-break { page-break-before: always; }
+      section h3 + p { page-break-after: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Asymmetric Polymorphic Network Architecture (APNA)</h1>
+      <p class="subtitle">A Moving-Target Approach for High-Availability Web3 Node &amp; RPC Infrastructure</p>
+      <p class="meta">Eduard Samokhvalov · Version 1.0 · March 2025</p>
+      <p class="meta contact"><a href="mailto:edward.samokhvalov@gmail.com">edward.samokhvalov@gmail.com</a></p>
+    </header>
+
+    <section id="abstract">
+      <h2>Abstract</h2>
+      <p>This whitepaper proposes <strong>Asymmetric Polymorphic Network Architecture (APNA)</strong> for large-scale distributed infrastructure hosting blockchain nodes and RPC services. APNA combines <strong>asymmetric</strong> treatment of traffic and failure domains (by role and plane) with <strong>polymorphic</strong> behaviour: intentional diversity of topology and segmentation <em>plus</em> controlled, dynamic change of that topology over time, unpredictable to an external or partially compromised observer. The goal is to reduce single-point-of-failure, single-pattern-of-attack, and <em>pattern-stability</em> for attackers—making reconnaissance and persistence harder without introducing operational bottlenecks. The design is grounded in technologies already in use: <strong>EVPN/VXLAN</strong>, <strong>BGP/OSPF</strong>, <strong>Arista EOS</strong> and <strong>Juniper JunOS</strong>, with automation via <strong>Ansible</strong> and <strong>Python</strong>.</p>
+    </section>
+
+    <section id="problem">
+      <h2>1. Problem Statement and Demand Justification</h2>
+      <h3>1.1 Threat Landscape (2024–2025)</h3>
+      <ul>
+        <li><strong>Volume:</strong> Cloudflare blocked <strong>20.5 million DDoS attacks</strong> in Q1 2025—<strong>358% YoY increase</strong>; ~96% of all attacks blocked in 2024 [1].</li>
+        <li><strong>Infrastructure targeting:</strong> ~<strong>6.6 million</strong> attacks targeted network infrastructure directly in an 18-day multi-vector campaign [1].</li>
+        <li><strong>Intensity:</strong> ~700 hyper-volumetric attacks &gt;1 Tbps or 1 Bpps; peaks at <strong>4.8 Bpps</strong> and <strong>6.5 Tbps</strong> [1][2].</li>
+        <li>Web3/node risks: malicious RPC nodes, state-sync and chain-split vulnerabilities [3][4][5]. Static, uniform topology is easier to probe and attack repeatedly.</li>
+      </ul>
+      <h3>1.2 Limitation of Static, Symmetric Designs</h3>
+      <p>Same template across DCs → one reconnaissance gives a blueprint for many. Symmetric roles → predictable failure propagation. Stable addressing → attackers build accurate maps. <strong>Moving Target Defense (MTD)</strong> addresses this by changing the attack surface over time [6][7][8]; APNA does so without unacceptable overhead (Section 4).</p>
+    </section>
+
+    <section id="concept">
+      <h2>2. Concept Definition</h2>
+      <h3>2.1 Asymmetric</h3>
+      <p>Differentiation by function and plane: control vs data vs RPC/edge treated differently (failure domains, path policies). Internal sync isolated from public RPC and management. Reduces single-point-of-failure and single-pattern-of-attack.</p>
+      <h3>2.2 Polymorphic</h3>
+      <p><strong>Diversity:</strong> Intentional variation of topology/segmentation across DCs (no single template). <strong>Dynamic change:</strong> Topology changes over time (policy, time windows, or pseudo-random schedule). Orchestrated and deterministic for the control plane, but <strong>unpredictable</strong> to an external or partially compromised observer—hard to identify stable informational patterns.</p>
+      <h3>2.3 Combined</h3>
+      <p>Asymmetry limits blast radius; polymorphism (diversity + dynamic change) makes reconnaissance and persistence harder. Together = <strong>APNA</strong>.</p>
+    </section>
+
+    <section id="tech">
+      <h2>3. Technology Grounding</h2>
+      <p>APNA uses the same stack as typical Web3/node infrastructure:</p>
+      <table>
+        <thead>
+          <tr><th>Layer</th><th>Technology</th><th>Role in APNA</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>L2/L3 overlay</td><td>EVPN/VXLAN</td><td>Segment diversity; dynamic VNI/segment re-assignment under orchestration.</td></tr>
+          <tr><td>Underlay</td><td>BGP, OSPF</td><td>Asymmetric policies per plane; optional route/path variation over time.</td></tr>
+          <tr><td>Switches</td><td>Arista EOS, Juniper JunOS</td><td>EVPN-VXLAN, BGP, ACLs; config driven by automation.</td></tr>
+          <tr><td>Automation</td><td>Ansible, Python, Bash</td><td>Generate/push diverse configs; drive morphing schedules and state transitions.</td></tr>
+          <tr><td>Servers / NICs</td><td>Bare-metal, Mellanox/Nvidia</td><td>Consistent performance; tuning per role.</td></tr>
+          <tr><td>Orchestration</td><td>Kubernetes, NodeOps</td><td>Service discovery and policy; RPC vs internal on different segments.</td></tr>
+        </tbody>
+      </table>
+      <p>EVPN-VXLAN security practices remain applicable [9][10]; APNA adds diversity and dynamism on top.</p>
+    </section>
+
+    <section id="feasibility">
+      <h2>4. Feasibility, Overhead, and Morphing Implementation</h2>
+      <h3>4.1 No Fundamental Overhead</h3>
+      <p>Morphing is control-plane/config only—no data-plane hot-path change. No VM migration. BGP/EVPN re-convergence is well understood; morphing intervals can allow full convergence. Adaptive MTD research shows large latency reduction when reconfig is applied intelligently [12].</p>
+      <h3>4.2 What Can Be Varied</h3>
+      <p>VNI–VLAN mapping; BGP path preference; primary/backup roles; ACL/zone boundaries. Legitimate traffic is served by the same automation; to an external observer the mapping and timing appear unpredictable.</p>
+
+      <h3>4.3 Morphing Algorithm: Exact Flow</h3>
+      <p>The loop runs in software on an orchestrator host; no custom hardware. All algorithm and flow infographics (Figs. 1–4) are included below. The flow is:</p>
+      <figure class="infographic">
+        <img src="infographic-morphing-flow.png" alt="Morphing algorithm: 6 steps from State model to Attack-triggered morph, with loop back to transition decision"/>
+        <figcaption>Fig. 1 — Morphing algorithm: exact flow (State model → Transition decision → Config generation → Apply order → Verification → optional Attack-triggered morph; loop back to step 2).</figcaption>
+      </figure>
+      <div class="algo-box">
+        <div class="step">1. State model</div>
+        <p>Finite states (e.g. A, B, C). Each state = data structure/file: VNI–VLAN mappings, BGP path roles, ACLs (YAML/Jinja2).</p>
+        <div class="step">2. Transition decision</div>
+        <p>On tick (every T min) or trigger: <strong>Deterministic cycle:</strong> <code>next_state = (current_state + 1) mod N</code>. <strong>Unpredictable:</strong> <code>next_state = secure_random(0, N−1)</code> (entropy: Section 4.5).</p>
+        <div class="step">3. Config generation</div>
+        <p>From chosen state → device configs (Arista/Juniper): EVPN-VXLAN, BGP, ACLs. Deterministic given state.</p>
+        <div class="step">4. Apply order</div>
+        <p>Push in defined order (e.g. spines then leaves) via Ansible/eAPI/NETCONF; idempotent.</p>
+        <div class="step">5. Verification</div>
+        <p>Check BGP/EVPN convergence via device APIs; then update current_state and schedule next morph.</p>
+        <div class="step">6. Attack-triggered morph (optional)</div>
+        <p>On DDoS/IDS signal: shorten interval or immediate transition; then back to step 2.</p>
+      </div>
+
+      <h3>4.4 Transition Decision (Step 2) Illustrated</h3>
+      <figure class="infographic">
+        <img src="infographic-transition-decision.png" alt="Transition decision: deterministic cycle vs unpredictable secure_random; entropy sources"/>
+        <figcaption>Fig. 2 — Transition decision: deterministic cycle vs unpredictable random choice; both yield next_state for Config generation.</figcaption>
+      </figure>
+
+      <h3>4.5 Entropy: Is a Quantum Token Necessary?</h3>
+      <p><strong>No.</strong> Unpredictability can use a <strong>CSPRNG</strong> (e.g. <code>/dev/urandom</code>, Python <code>secrets</code>). Optionally HSM or hardware RNG. A <strong>quantum RNG (QRNG)</strong> or “quantum token” device gives true randomness—optional hardening for high-assurance environments, not a prerequisite. If used, the orchestrator reads bytes from the QRNG instead of <code>secrets</code>/<code>urandom</code> when choosing next state; the rest of the flow is unchanged.</p>
+    </section>
+
+    <section id="comparison" class="page-break">
+      <h2>5. Comparison: APNA vs Traditional</h2>
+      <table>
+        <thead>
+          <tr><th>Dimension</th><th>Traditional static symmetric</th><th>APNA</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Topology</td><td>Same template across DCs/segments</td><td>Intentional diversity per DC/segment</td></tr>
+          <tr><td>Change over time</td><td>Static; maintenance/incidents only</td><td>Controlled morphing; unpredictable to attacker</td></tr>
+          <tr><td>Role differentiation</td><td>Often symmetric</td><td>Asymmetric by plane (control/data/RPC)</td></tr>
+          <tr><td>Failure blast radius</td><td>Single pattern can repeat</td><td>Contained by asymmetry and diversity</td></tr>
+          <tr><td>Attacker reconnaissance</td><td>Stable map; one scan applies widely</td><td>Map goes stale; pattern identification difficult</td></tr>
+          <tr><td>Persistence</td><td>Long-lived targets</td><td>Harder; targets and paths shift</td></tr>
+          <tr><td>Implementation</td><td>Single golden config</td><td>Automation + morphing state machine</td></tr>
+          <tr><td>Performance</td><td>Baseline</td><td>No extra data-plane load; morphing is config-plane</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="visuals">
+      <h2>6. Topology and State Machine: Infographics</h2>
+      <p>Additional algorithm and topology diagrams (state machine and traditional vs APNA topology):</p>
+      <figure class="infographic">
+        <img src="infographic-topologies.png" alt="Traditional symmetric vs APNA asymmetric polymorphic topology comparison"/>
+        <figcaption>Fig. 3 — Topology comparison: traditional (same blueprint per DC) vs APNA (different shapes per DC, RPC/sync/control differentiated).</figcaption>
+      </figure>
+      <figure class="infographic">
+        <img src="infographic-morphing.png" alt="APNA morphing state machine A B C with triggers and orchestrator"/>
+        <figcaption>Fig. 4 — Morphing state machine (A → B → C → A); transition triggers and orchestrator (Ansible/Python).</figcaption>
+      </figure>
+    </section>
+
+    <section id="references">
+      <h2>7. References</h2>
+      <ol>
+        <li>Cloudflare. “Targeted by 20.5 million DDoS attacks…” 2025 Q1 DDoS Threat Report. <a href="https://blog.cloudflare.com/ddos-threat-report-for-2025-q1">blog.cloudflare.com</a></li>
+        <li>Cloudflare. 2025 Q4 DDoS threat report. <a href="https://blog.cloudflare.com/ddos-threat-report-2025-q4">blog.cloudflare.com</a></li>
+        <li>SlowMist. “Malicious Modification of RPC Node Links to Steal Assets.” Medium, 2024.</li>
+        <li>Cointelegraph/TradingView. “SlowMist uncovers crypto scam exploiting altered Ethereum nodes.” 2024.</li>
+        <li>CometBFT. ASA-2024-009: State syncing from malicious node. GitHub Security Advisories, 2024.</li>
+        <li>J. Hong, D. Kim. “Toward Proactive, Adaptive Defense: A Survey on Moving Target Defense.” IEEE Communications Surveys &amp; Tutorials, 2020.</li>
+        <li>Lei et al. “A Survey of Moving Target Defenses for Network Security.” IEEE, 2020.</li>
+        <li>S. N. Khan et al. “Moving Target Defense (MTD): Recent Advances and Future Research Challenges.” IEEE, 2023.</li>
+        <li>Cisco. “Securing Network Infrastructure in VXLAN BGP EVPN Data Centers.”</li>
+        <li>Juniper. “Security Policies for VXLAN,” “Understanding EVPN with VXLAN.”</li>
+        <li>M. Albanese et al. “Automated benchmark network diversification…” Moving target defense. IJIS, 2021.</li>
+        <li>Performance and Security Evaluation of Moving Target Defense in SDN (MADS). IEEE, 2023.</li>
+      </ol>
+    </section>
+
+    <section id="conclusion">
+      <h2>8. Conclusion</h2>
+      <div class="conclusion">
+        <p><strong>APNA</strong> hardens Web3 node and RPC infrastructure against pattern-based and reconnaissance-driven attacks: <strong>asymmetry</strong> differentiates planes and limits blast radius; <strong>polymorphism</strong> (diversity + dynamic, unpredictable change) makes it difficult to identify stable patterns. The design is feasible with Arista EOS, Juniper JunOS, EVPN/VXLAN, BGP/OSPF, and Ansible/Python, and avoids data-plane overhead by keeping morphing in the control and configuration plane.</p>
+      </div>
+    </section>
+
+    <section id="glossary" class="page-break">
+      <h2>9. Glossary of Technical Terms</h2>
+      <dl class="glossary">
+        <dt>ACL</dt>
+        <dd>Access Control List. A list of rules applied to network traffic (allow/deny by source, destination, port, etc.) on routers or firewalls.</dd>
+        <dt>APNA</dt>
+        <dd>Asymmetric Polymorphic Network Architecture. The design proposed in this whitepaper: asymmetric treatment of traffic/planes plus polymorphic (diverse and dynamically changing) topology.</dd>
+        <dt>Ansible</dt>
+        <dd>Configuration-management and automation tool. Uses YAML playbooks to define desired state and pushes config to devices (e.g. network kit, servers) over SSH or APIs.</dd>
+        <dt>Arista EOS</dt>
+        <dd>EOS (Extensible Operating System). Arista Networks’ switch OS. Supports EVPN-VXLAN, BGP, eAPI, and programmatic configuration.</dd>
+        <dt>BGP</dt>
+        <dd>Border Gateway Protocol. The main routing protocol used on the Internet and in large data-center underlays. Exchanges reachability and path information between autonomous systems or routers.</dd>
+        <dt>Control plane</dt>
+        <dd>The part of a network device that runs routing protocols, manages sessions, and decides how to forward traffic (as opposed to the data plane, which performs the actual packet forwarding).</dd>
+        <dt>CSPRNG</dt>
+        <dd>Cryptographically Secure Pseudo-Random Number Generator. A PRNG whose output is unpredictable for an observer; used for keys, nonces, and in APNA for unpredictable morphing schedules.</dd>
+        <dt>Data plane</dt>
+        <dd>The forwarding path in a router or switch that actually moves packets (as opposed to the control plane, which builds routing tables and policies).</dd>
+        <dt>DC</dt>
+        <dd>Data center.</dd>
+        <dt>DDoS</dt>
+        <dd>Distributed Denial of Service. An attack that floods a target with traffic from many sources to exhaust capacity and deny service to legitimate users.</dd>
+        <dt>eAPI</dt>
+        <dd>Arista EOS API. REST/HTTP interface on Arista switches for programmatic configuration and querying.</dd>
+        <dt>EVPN</dt>
+        <dd>Ethernet VPN. A control-plane standard (often over BGP) for Layer 2 VPNs and data-center overlays. Used with VXLAN as the data-plane encapsulation (EVPN-VXLAN).</dd>
+        <dt>HSM</dt>
+        <dd>Hardware Security Module. Dedicated hardware that generates and stores cryptographic keys and can provide high-quality entropy; optional entropy source for APNA.</dd>
+        <dt>IDS</dt>
+        <dd>Intrusion Detection System. Monitors traffic or hosts for signs of attack; can feed an “attack detected” signal to trigger or accelerate APNA morphing.</dd>
+        <dt>Jinja2</dt>
+        <dd>A templating engine for Python (and used by Ansible). Renders config files from templates plus variables (e.g. state-dependent VNI mappings).</dd>
+        <dt>Juniper JunOS</dt>
+        <dd>Juniper Networks’ switch/router OS. Supports EVPN-VXLAN, BGP, NETCONF, and automation.</dd>
+        <dt>MTD</dt>
+        <dd>Moving Target Defense. A security approach that changes the attack surface over time (e.g. addresses, topology) so that reconnaissance becomes stale and attacks harder.</dd>
+        <dt>NETCONF</dt>
+        <dd>Network Configuration Protocol. IETF protocol for configuring network devices (XML-based, over SSH). Used by Juniper and others for automation.</dd>
+        <dt>NodeOps</dt>
+        <dd>Operations and tooling around blockchain or application nodes (deployment, monitoring, lifecycle). In this whitepaper, integration point for segment/service policy.</dd>
+        <dt>OSPF</dt>
+        <dd>Open Shortest Path First. A link-state interior gateway protocol used inside an AS for underlay routing (often alongside or instead of BGP in smaller fabrics).</dd>
+        <dt>QRNG</dt>
+        <dd>Quantum Random Number Generator. A hardware RNG that uses quantum effects for true randomness; optional entropy source for APNA morphing.</dd>
+        <dt>RPC</dt>
+        <dd>Remote Procedure Call. In Web3 context, the interface (e.g. HTTP/JSON-RPC) that clients use to query blockchain nodes (e.g. balances, transactions). RPC-facing infrastructure is a distinct plane in APNA.</dd>
+        <dt>Spine / leaf</dt>
+        <dd>Data-center topology: leaf switches connect servers; spine switches interconnect leaves. Traffic between leaves crosses the spine layer.</dd>
+        <dt>VLAN</dt>
+        <dd>Virtual LAN. A Layer 2 broadcast domain; traffic is isolated per VLAN. Often mapped to VXLAN VNIs in overlay designs.</dd>
+        <dt>VNI</dt>
+        <dd>VXLAN Network Identifier. A 24-bit identifier in the VXLAN header that distinguishes overlay segments (analogous to a VLAN ID in the overlay).</dd>
+        <dt>VXLAN</dt>
+        <dd>Virtual eXtensible Local Area Network. Encapsulation that carries Layer 2 frames over Layer 3 (UDP). Used with EVPN for data-center overlays and segment diversity in APNA.</dd>
+        <dt>Web3</dt>
+        <dd>Decentralized applications and infrastructure built on blockchains; in this whitepaper, node and RPC hosting for multiple chains.</dd>
+        <dt>YAML</dt>
+        <dd>Human-readable data format. Used for Ansible playbooks and for defining APNA state (e.g. VNI–VLAN mappings per state).</dd>
+      </dl>
+    </section>
+
+    <footer>
+      <p>Document prepared as a technical showcase for high-availability Web3 infrastructure roles. APNA is a design proposal; implementation details and morphing policies should be tailored to specific environments and risk assessments.</p>
+    </footer>
+  </div>
+</body>
+</html>

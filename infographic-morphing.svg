@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450" font-family="Times New Roman, Times, serif">
+  <defs>
+    <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff"/>
+      <stop offset="100%" style="stop-color:#fafafa"/>
+    </linearGradient>
+    <linearGradient id="stateA" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ccfbf1"/>
+      <stop offset="100%" style="stop-color:#99f6e4"/>
+    </linearGradient>
+    <linearGradient id="stateB" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ede9fe"/>
+      <stop offset="100%" style="stop-color:#ddd6fe"/>
+    </linearGradient>
+    <linearGradient id="stateC" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#d1fae5"/>
+      <stop offset="100%" style="stop-color:#a7f3d0"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg2)"/>
+  <text x="400" y="32" text-anchor="middle" fill="#1a1a1a" font-size="18" font-weight="700">APNA Morphing Mechanism</text>
+  <text x="400" y="50" text-anchor="middle" fill="#1a1a1a" font-size="11">Controlled topology change - unpredictable to observer</text>
+
+  <!-- State machine: dt labels offset so they don't sit on arrows -->
+  <g transform="translate(400, 200)">
+    <ellipse cx="0" cy="-95" rx="70" ry="40" fill="url(#stateA)" stroke="#0f766e" stroke-width="2"/>
+    <text x="0" y="-91" text-anchor="middle" fill="#0f766e" font-size="14" font-weight="700">State A</text>
+    <text x="0" y="-74" text-anchor="middle" fill="#1a1a1a" font-size="8">VNI 1, P1</text>
+    <ellipse cx="95" cy="55" rx="70" ry="40" fill="url(#stateB)" stroke="#6d28d9" stroke-width="2"/>
+    <text x="95" y="59" text-anchor="middle" fill="#6d28d9" font-size="14" font-weight="700">State B</text>
+    <text x="95" y="76" text-anchor="middle" fill="#1a1a1a" font-size="8">VNI 2, P2</text>
+    <ellipse cx="-95" cy="55" rx="70" ry="40" fill="url(#stateC)" stroke="#15803d" stroke-width="2"/>
+    <text x="-95" y="59" text-anchor="middle" fill="#15803d" font-size="14" font-weight="700">State C</text>
+    <text x="-95" y="76" text-anchor="middle" fill="#1a1a1a" font-size="8">VNI 3, P3</text>
+
+    <path d="M 52 -58 Q 78 4 74 38" fill="none" stroke="#0f766e" stroke-width="2"/>
+    <path d="M71 34 L75 38 L70 40 Z" fill="#0f766e"/>
+    <text x="88" y="8" fill="#0f766e" font-size="9" font-weight="600">dt</text>
+    <path d="M 26 72 Q 2 84 -54 72" fill="none" stroke="#6d28d9" stroke-width="2"/>
+    <path d="M-59 70 L-55 74 L-57 79 Z" fill="#6d28d9"/>
+    <text x="-38" y="98" fill="#6d28d9" font-size="9" font-weight="600">dt</text>
+    <path d="M -120 36 Q -68 -24 0 -52" fill="none" stroke="#15803d" stroke-width="2"/>
+    <path d="M-4 -56 L0 -52 L-2 -47 Z" fill="#15803d"/>
+    <text x="-72" y="-18" fill="#15803d" font-size="9" font-weight="600">dt</text>
+  </g>
+
+  <!-- Trigger box -->
+  <g transform="translate(270, 332)">
+    <rect x="0" y="0" width="260" height="82" rx="6" fill="#fff" stroke="#1a1a1a" stroke-width="1.5"/>
+    <text x="130" y="22" text-anchor="middle" fill="#1a1a1a" font-size="12" font-weight="700">Transition triggers</text>
+    <text x="130" y="42" text-anchor="middle" fill="#1a1a1a" font-size="10">Time window (e.g. every T min)</text>
+    <text x="130" y="58" text-anchor="middle" fill="#1a1a1a" font-size="10">Pseudo-random schedule</text>
+    <text x="130" y="74" text-anchor="middle" fill="#c2410c" font-size="10" font-weight="700">Attack detected: accelerate</text>
+  </g>
+
+  <!-- Orchestrator box -->
+  <g transform="translate(550, 332)">
+    <rect x="0" y="0" width="220" height="82" rx="6" fill="#e0f2fe" stroke="#1e40af" stroke-width="1.5"/>
+    <text x="110" y="22" text-anchor="middle" fill="#1e40af" font-size="12" font-weight="700">Orchestrator</text>
+    <text x="110" y="42" text-anchor="middle" fill="#1a1a1a" font-size="10">Ansible / Python</text>
+    <text x="110" y="58" text-anchor="middle" fill="#1a1a1a" font-size="10">Selects next state, pushes config</text>
+    <text x="110" y="74" text-anchor="middle" fill="#1a1a1a" font-size="9">Deterministic for ops; opaque to attacker</text>
+  </g>
+
+  <!-- What morphs: single line, no overlap -->
+  <g transform="translate(30, 425)">
+    <text x="0" y="0" fill="#1a1a1a" font-size="11" font-weight="700">What morphs: </text>
+    <text x="82" y="0" fill="#1a1a1a" font-size="10">VNI-VLAN map; BGP path; primary/backup; ACL zones</text>
+  </g>
+
+  <text x="400" y="442" text-anchor="middle" fill="#1a1a1a" font-size="9">No data-plane hot-path change; convergence after config push (BGP/EVPN).</text>
+</svg>

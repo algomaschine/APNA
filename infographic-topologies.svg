@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 540" width="900" height="540" font-family="Times New Roman, Times, serif">
+  <defs>
+    <linearGradient id="bg1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff"/>
+      <stop offset="100%" style="stop-color:#fafafa"/>
+    </linearGradient>
+    <linearGradient id="rpc" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#b91c1c"/>
+      <stop offset="100%" style="stop-color:#991b1b"/>
+    </linearGradient>
+    <linearGradient id="sync" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0c4a6e"/>
+      <stop offset="100%" style="stop-color:#075985"/>
+    </linearGradient>
+    <linearGradient id="ctrl" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#5b21b6"/>
+      <stop offset="100%" style="stop-color:#4c1d95"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="540" fill="url(#bg1)"/>
+  <text x="450" y="28" text-anchor="middle" fill="#1a1a1a" font-size="17" font-weight="700">Topology Comparison: Traditional vs APNA</text>
+
+  <!-- LEFT: Traditional -->
+  <g transform="translate(30, 50)">
+    <text x="210" y="0" text-anchor="middle" fill="#1a1a1a" font-size="13" font-weight="700">Traditional - Symmetric</text>
+    <text x="210" y="16" text-anchor="middle" fill="#1a1a1a" font-size="10">Same template in every DC</text>
+    <rect x="10" y="38" width="400" height="108" rx="6" fill="#fff" stroke="#1a1a1a" stroke-width="1"/>
+    <text x="210" y="58" text-anchor="middle" fill="#1a1a1a" font-size="11" font-weight="600">DC 1</text>
+    <rect x="30" y="70" width="52" height="26" rx="6" fill="url(#rpc)"/>
+    <text x="56" y="86" text-anchor="middle" fill="#fff" font-size="9" font-weight="600">RPC</text>
+    <rect x="92" y="70" width="52" height="26" rx="6" fill="url(#sync)"/>
+    <text x="118" y="86" text-anchor="middle" fill="#fff" font-size="9" font-weight="600">Sync</text>
+    <rect x="154" y="70" width="52" height="26" rx="6" fill="url(#ctrl)"/>
+    <text x="180" y="86" text-anchor="middle" fill="#fff" font-size="9" font-weight="600">Ctrl</text>
+    <line x1="56" y1="96" x2="56" y2="118" stroke="#1a1a1a" stroke-width="1"/>
+    <line x1="118" y1="96" x2="118" y2="118" stroke="#1a1a1a"/>
+    <line x1="180" y1="96" x2="180" y2="118" stroke="#1a1a1a"/>
+    <rect x="40" y="118" width="340" height="14" rx="4" fill="#1a1a1a"/>
+    <text x="210" y="128" text-anchor="middle" fill="#fff" font-size="8" font-weight="600">Spine (same design)</text>
+    <rect x="10" y="152" width="400" height="108" rx="6" fill="#fff" stroke="#1a1a1a" stroke-width="1"/>
+    <text x="210" y="172" text-anchor="middle" fill="#1a1a1a" font-size="11" font-weight="600">DC 2</text>
+    <rect x="30" y="184" width="52" height="26" rx="6" fill="url(#rpc)"/>
+    <text x="56" y="200" text-anchor="middle" fill="#fff" font-size="9" font-weight="600">RPC</text>
+    <rect x="92" y="184" width="52" height="26" rx="6" fill="url(#sync)"/>
+    <text x="118" y="200" text-anchor="middle" fill="#fff" font-size="9" font-weight="600">Sync</text>
+    <rect x="154" y="184" width="52" height="26" rx="6" fill="url(#ctrl)"/>
+    <text x="180" y="200" text-anchor="middle" fill="#fff" font-size="9" font-weight="600">Ctrl</text>
+    <line x1="56" y1="210" x2="56" y2="232" stroke="#1a1a1a"/>
+    <line x1="118" y1="210" x2="118" y2="232" stroke="#1a1a1a"/>
+    <line x1="180" y1="210" x2="180" y2="232" stroke="#1a1a1a"/>
+    <rect x="40" y="232" width="340" height="14" rx="4" fill="#1a1a1a"/>
+    <text x="210" y="242" text-anchor="middle" fill="#fff" font-size="8" font-weight="600">Spine (same design)</text>
+    <text x="210" y="308" text-anchor="middle" fill="#1a1a1a" font-size="9" font-weight="700">One blueprint for all DCs</text>
+    <text x="210" y="322" text-anchor="middle" fill="#1a1a1a" font-size="8">Attacker maps once, reuses everywhere</text>
+  </g>
+
+  <!-- RIGHT: APNA -->
+  <g transform="translate(460, 50)">
+    <text x="210" y="0" text-anchor="middle" fill="#0f766e" font-size="13" font-weight="700">APNA - Asymmetric + Polymorphic</text>
+    <text x="210" y="16" text-anchor="middle" fill="#1a1a1a" font-size="10">Different topology per DC</text>
+    <rect x="10" y="38" width="400" height="108" rx="6" fill="#fff" stroke="#0f766e" stroke-width="1.5"/>
+    <text x="210" y="58" text-anchor="middle" fill="#0f766e" font-size="11" font-weight="600">DC 1 (shape A)</text>
+    <rect x="30" y="70" width="48" height="26" rx="6" fill="url(#rpc)"/>
+    <text x="54" y="86" text-anchor="middle" fill="#fff" font-size="9" font-weight="600">RPC</text>
+    <rect x="88" y="70" width="52" height="26" rx="6" fill="url(#sync)"/>
+    <text x="114" y="86" text-anchor="middle" fill="#fff" font-size="9" font-weight="600">Sync</text>
+    <rect x="152" y="70" width="52" height="26" rx="6" fill="url(#ctrl)"/>
+    <text x="178" y="86" text-anchor="middle" fill="#fff" font-size="9" font-weight="600">Ctrl</text>
+    <line x1="54" y1="96" x2="54" y2="118" stroke="#0f766e"/>
+    <line x1="114" y1="96" x2="114" y2="118" stroke="#0f766e"/>
+    <line x1="178" y1="96" x2="178" y2="118" stroke="#0f766e"/>
+    <rect x="35" y="118" width="160" height="14" rx="4" fill="#1a1a1a"/>
+    <rect x="210" y="118" width="180" height="14" rx="4" fill="#1a1a1a"/>
+    <text x="115" y="128" text-anchor="middle" fill="#fff" font-size="8" font-weight="600">Spine RPC</text>
+    <text x="300" y="128" text-anchor="middle" fill="#fff" font-size="8" font-weight="600">Spine Sync/Ctrl</text>
+    <rect x="10" y="152" width="400" height="108" rx="6" fill="#fff" stroke="#6d28d9" stroke-width="1.5"/>
+    <text x="210" y="172" text-anchor="middle" fill="#6d28d9" font-size="11" font-weight="600">DC 2 (shape B)</text>
+    <rect x="30" y="184" width="68" height="26" rx="6" fill="url(#rpc)"/>
+    <text x="64" y="200" text-anchor="middle" fill="#fff" font-size="8" font-weight="600">RPC/Edge</text>
+    <rect x="108" y="184" width="52" height="26" rx="6" fill="url(#sync)"/>
+    <text x="134" y="200" text-anchor="middle" fill="#fff" font-size="9" font-weight="600">Sync</text>
+    <rect x="172" y="184" width="32" height="26" rx="6" fill="url(#ctrl)"/>
+    <text x="188" y="200" text-anchor="middle" fill="#fff" font-size="8" font-weight="600">Ctrl</text>
+    <line x1="64" y1="210" x2="64" y2="232" stroke="#6d28d9"/>
+    <line x1="134" y1="210" x2="134" y2="232" stroke="#6d28d9"/>
+    <line x1="188" y1="210" x2="188" y2="232" stroke="#6d28d9"/>
+    <rect x="40" y="232" width="160" height="14" rx="4" fill="#1a1a1a"/>
+    <rect x="212" y="232" width="76" height="14" rx="4" fill="#1a1a1a"/>
+    <text x="120" y="242" text-anchor="middle" fill="#fff" font-size="8" font-weight="600">Spine A</text>
+    <text x="250" y="242" text-anchor="middle" fill="#fff" font-size="8" font-weight="600">Spine B</text>
+    <text x="210" y="308" text-anchor="middle" fill="#1a1a1a" font-size="9" font-weight="700">Different blueprint per DC</text>
+    <text x="210" y="322" text-anchor="middle" fill="#1a1a1a" font-size="8">Morphing over time - map goes stale</text>
+  </g>
+
+  <line x1="450" y1="50" x2="450" y2="500" stroke="#1a1a1a" stroke-width="1"/>
+  <text x="450" y="518" text-anchor="middle" fill="#1a1a1a" font-size="9">EVPN/VXLAN - BGP/OSPF - Arista EOS / Juniper JunOS</text>
+</svg>
